@@ -20,16 +20,22 @@ array_dx = [(array_average_x[i] - min([(array_x[j][i]) for j in range(8)])) for 
 array_xn = [[(array_x[j][i]-array_average_x[i])/array_dx[i] for i in range(3)] for j in range(8)]
 
 # Знаходження точки плану
-average_y = sum(array_y)/len(array_y)
+# average_y = sum(array_y)/len(array_y)
+#
+# difference_average_y = [array_y[i]-average_y for i in range(len(array_y))]
+# tmp_list = [min(difference_average_y) for i in range(len(array_y))]
+# for i in range(len(difference_average_y)):
+#     if difference_average_y[i] < 0:
+#         tmp_list[i] = difference_average_y[i]
+# index = None
+# for i in range(len(tmp_list)):
+#     if tmp_list[i] == max(tmp_list):
+#         index = i
 
-difference_average_y = [array_y[i]-average_y for i in range(len(array_y))]
-tmp_list = [min(difference_average_y) for i in range(len(array_y))]
-for i in range(len(difference_average_y)):
-    if difference_average_y[i] < 0:
-        tmp_list[i] = difference_average_y[i]
+# Знаходження min(y) - варіант 117
 index = None
-for i in range(len(tmp_list)):
-    if tmp_list[i] == max(tmp_list):
+for i in range(len(array_y)):
+    if array_y[i] == min(array_y):
         index = i
 
 print('_'*100)
@@ -49,10 +55,11 @@ print(array_dx)
 print('_'*100)
 print('Нормовані значення Хn:')
 for i in range(len(array_xn)): print('[{:7.4f}, {:7.4f}, {:7.4f}]'.format(array_xn[i][0], array_xn[i][1], array_xn[i][2]))
+# print('_'*100)
+# print('Середнє значення Y:', average_y)
 print('_'*100)
-print('Середнє значення Y:', average_y)
-print('_'*100)
-print('Для →Y - де Y середнє значення масиву Y')
+# print('Для →Y - де Y середнє значення масиву Y')
+print('min(y)')
 print('x0: {}\nx1: {}\nx2: {}'.format(array_x[index][0], array_x[index][1], array_x[index][2]))
 print('Y = ', array_y[index])
 print('_'*100)
