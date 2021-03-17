@@ -14,7 +14,6 @@ x2_max = 10
 y_min = (20 - 108) * 10
 y_max = (30 - 108) * 10
 x0 = 1
-m = 5
 xn = [[-1, -1], [1, -1], [-1, 1]]
 
 
@@ -27,6 +26,7 @@ def romanovskii():
     global theta_uv
     global r_uv
     global m
+    global counter_of_dispersions
 
     # Для довірчої ймовірності 0.9
     romanovskii_table = {(5, 6, 7): 2.0, (8, 9): 2.17, (10, 11): 2.29,
@@ -62,9 +62,16 @@ def romanovskii():
     if not r_uv[0] <= rom_value or not r_uv[1] <= rom_value or not r_uv[2] <= rom_value:
         m += 1
         romanovskii()
+    else:
+        counter_of_dispersions += 1
 
 
-romanovskii()
+counter_of_dispersions = 0
+for _ in range(100):
+    m = 5
+    romanovskii()
+
+print('Number of homogeneous dispersions: ', counter_of_dispersions)
 
 mx1 = (xn[0][0] + xn[1][0] + xn[2][0]) / 3
 mx2 = (xn[0][1] + xn[1][1] + xn[2][1]) / 3
