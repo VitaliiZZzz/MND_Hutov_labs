@@ -1,8 +1,8 @@
 import random
 from beautifultable import BeautifulTable
 import numpy as np
-import os
-import sys
+import time
+
 
 # Гутов Віталій
 # Варіант 108:
@@ -158,11 +158,23 @@ def fish():
         return 'The regression equation is adequate to the original at a significance level of 0.05'
 
 
-m = 3
-main()
-kohren()
-t_list = studens()
-fisher = fish()
+counted_time = 0  # total program execution time
+num_of_iterations = 100
+for _ in range(num_of_iterations):
+    m = 3
+
+    begin_time = time.perf_counter()
+
+    main()
+    kohren()
+    t_list = studens()
+    fisher = fish()
+
+    end_time = time.perf_counter()
+    counted_time += end_time - begin_time
+
+average_time = counted_time / num_of_iterations
+
 
 plan_table = BeautifulTable()
 headers_x = ['X{}'.format(i) for i in range(1, m+1)]
@@ -193,3 +205,4 @@ print('Fisher')
 print('Fp = ', round(fp, 3))
 print(fisher)
 
+print('\nAverage time of 1 iteration {} seconds'.format(average_time))
