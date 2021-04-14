@@ -96,8 +96,8 @@ def kohren():
     global s
     s = [sum([(y_matrix[j][i] - average_y[i]) ** 2 for i in range(m)]) / m for j in range(n)]
     gp = max(s) / sum(s)
-    gt = f.ppf(q=1 - q1, dfn=f1, dfd=(f2 - 1) * f1)
-
+    khr = f.ppf(q=1 - q1, dfn=f1, dfd=(f2 - 1) * f1)
+    gt = khr / (khr + f2 - 1)
     if gp > gt:
         m += 1
         main()
