@@ -1,5 +1,6 @@
 import random
 from beautifultable import BeautifulTable
+from scipy.stats import f, t
 
 # Гутов Віталій
 # Варіант 108:
@@ -18,8 +19,15 @@ def main():
     global n
     global b0, b1, b2, b3, b12, b13, b23, b123
     global plan_matrix, plan_matrix_normal
+    global f1, f2, f3, q1, q
     m = 3
     n = 8
+
+    f1 = m-1
+    f2 = n
+    f3 = f1 * f2
+    q = 0.05
+    q1 = q / f2
 
     x1_min = -5
     x1_max = 15
@@ -88,7 +96,7 @@ def kohren():
     global s
     s = [sum([(y_matrix[j][i] - average_y[i]) ** 2 for i in range(m)]) / m for j in range(n)]
     gp = max(s) / sum(s)
-    gt = 0.5157
+    gt = f.ppf(q=1 - q1, dfn=f1, dfd=(f2 - 1) * f1)
 
     if gp > gt:
         m += 1
@@ -110,16 +118,16 @@ def studens():
     s_beta = s_beta_2 ** (1 / 2)
 
     bb = [b0, b1, b2, b3, b12, b13, b23, b123]
-    t = [abs(bb[i]) / s_beta for i in range(n)]
-    tt = 2.120
+    t_tmp = [abs(bb[i]) / s_beta for i in range(n)]
+    tt = t.ppf(q=0.975, df=f3)
     blist = [b0, b1, b2, b3, b12, b13, b23, b123]
 
     for i in range(n):
-        if t[i] < tt:
+        if t_tmp[i] < tt:
             blist[i] = 0
             d -= 1
 
-    return t
+    return t_tmp
 
 
 def fish():
@@ -130,12 +138,13 @@ def fish():
     global average_y
     global sb
     global fp
+    f4 = n - d
     y_reg = [b0 + b1 * plan_matrix[i][0] + b2 * plan_matrix[i][1] + b3 * plan_matrix[i][2] +
              b12 * plan_matrix[i][3] + b13 * plan_matrix[i][4] + b23 * plan_matrix[i][5] +
              b123 * plan_matrix[i][6] for i in range(n)]
     sad = (m / (n - d)) * int(sum([(y_reg[i] - average_y[i]) ** 2 for i in range(n)]))
     fp = sad / sb
-    if fp > 4.5:
+    if fp > f.ppf(q=0.95, dfn=f4, dfd=f3):
         return 'The regression equation is inadequate to the original at a significance level of 0.05'
     else:
         return 'The regression equation is adequate to the original at a significance level of 0.05'
