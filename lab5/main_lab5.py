@@ -1,4 +1,5 @@
 import random
+import time
 import sklearn.linear_model as lm
 from scipy.stats import f, t
 from functools import partial
@@ -163,7 +164,12 @@ def check(x, y, b, n, m):
     print('\nThe average value of y:', y_aver)
     disp = s_kv(y, y_aver, n, m)
     print('The variance y:', disp)
+
+    begin_time = time.perf_counter()
     gp = kohren_kr(y, y_aver, n, m)
+    end_time = time.perf_counter()
+    counted_kohren = end_time - begin_time
+
     print(f'gp = {gp}')
     if gp < g_kr:
         print('With a probability of {} dispersions are homogeneous.'.format(1 - q))
@@ -171,7 +177,12 @@ def check(x, y, b, n, m):
         print("It is necessary to increase the number of experiments")
         m += 1
         main(n, m)
+
+    begin_time = time.perf_counter()
     ts = student_kr(x[:, 1:], y, y_aver, n, m)
+    end_time = time.perf_counter()
+    counted_stud = end_time - begin_time
+
     print('\nStudent criterion:\n{}:'.format(ts))
     res = [t for t in ts if t > t_student]
     final_k = [b[i] for i in range(len(ts)) if ts[i] in res]
@@ -187,7 +198,12 @@ def check(x, y, b, n, m):
         print('')
         return
     f4 = n - d
+
+    begin_time = time.perf_counter()
     f_p = fisher_kr(y, y_aver, y_new, n, m, d)
+    end_time = time.perf_counter()
+    counted_fish = end_time - begin_time
+
     fisher = partial(f.ppf, q=0.95)
     f_t = fisher(dfn=f4, dfd=f3)
     print('\nFisher adequacy check')
@@ -197,6 +213,9 @@ def check(x, y, b, n, m):
         print('The mathematical model is adequate to the experimental data')
     else:
         print('The mathematical model is inadequate to the experimental data')
+
+    print('\nTime of statistical checks\nkohren - {} seconds\nstudent - {} seconds\nfisher - {} seconds'
+          .format(counted_kohren, counted_stud, counted_fish))
 
 
 def main(n, m):
