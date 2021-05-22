@@ -189,10 +189,10 @@ def main(n, m):
     fp = sad / sb
     f4 = n - d
     print("fp =", fp)
-    if fp < f.ppf(q=0.95, dfn=f4, dfd=f3):
-        print("The mathematical model is adequate to the experimental data")
-    else:
+    if fp > f.ppf(q=0.95, dfn=f4, dfd=f3) or len(insign_coef) == 2:
         print("The mathematical model is inadequate to the experimental data")
+    else:
+        print("The mathematical model is adequate to the experimental data")
 
 
 main(15, 3)
